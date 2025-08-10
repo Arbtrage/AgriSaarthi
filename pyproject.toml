@@ -13,11 +13,11 @@ dependencies = [
   "llama-index-llms-google-genai>=0.1.10",
   "llama-index-embeddings-google-genai>=0.1.2",
   "google-genai>=0.4.0",
-  "llama-index-vector-stores-milvus>=0.1.9",
   "pymilvus>=2.6.0",
   "chonkie>=1.0.6a0",
   "pypdf>=5.0.0",
   "python-dotenv>=1.0.1",
+  "fastmcp>=2.11.2",
 ]
 
 [tool.uv]

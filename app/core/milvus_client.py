@@ -11,15 +11,12 @@ _milvus_client = None
 async def get_milvus_client():
     global _milvus_client
     if _milvus_client is None:
-        settings = get_settings()
-        if not settings.milvus_uri:
-            raise RuntimeError("MILVUS_URI is required in environment")
+      
 
         # Create MilvusClient with URI and token
         _milvus_client = MilvusClient(
-            uri=settings.milvus_uri, token=settings.milvus_token
+            host="localhost", port=19530,alias="default"
         )
-        print(f"Connected to Milvus: {settings.milvus_uri} successfully")
 
     return _milvus_client
 
