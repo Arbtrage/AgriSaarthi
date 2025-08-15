@@ -40,7 +40,7 @@ Remember to respond in the user's preferred language: {self.language}"""
         """Get language-specific instruction based on the language code."""
         language_map = {
             "hi-IN": "आप हिंदी में बात करेंगे और किसानों की मदद करेंगे।",
-            "en-US": "You will communicate in English and help farmers.",
+            "en-IN": "You will communicate in English and help farmers.",
             "pa-IN": "ਤੁਸੀਂ ਪੰਜਾਬੀ ਵਿੱਚ ਗੱਲ ਕਰੋਗੇ ਅਤੇ ਕਿਸਾਨਾਂ ਦੀ ਮਦਦ ਕਰੋਗੇ।",
             "bn-IN": "আপনি বাংলায় কথা বলবেন এবং কৃষকদের সাহায্য করবেন।",
             "ta-IN": "நீங்கள் தமிழில் பேசுவீர்கள் மற்றும் விவசாயிகளுக்கு உதவுவீர்கள்।",
