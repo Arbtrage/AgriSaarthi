@@ -3,9 +3,9 @@ version: "3.8"
 services:
   agrisathi-api:
     build: .
-    container_name: agrisathi-api
-    ports:
-      - "8000:8000"
+    container_name: agrisathi-api-prod
+    expose:
+      - "8000"
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash}

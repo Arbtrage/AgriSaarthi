@@ -24,17 +24,23 @@ async def root():
     return {"status": "ok"}
 
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
+
 def run_mcp_server():
     """Run the MCP server in a separate thread"""
     mcp.run(transport="streamable-http")
 
 
 if __name__ == "__main__":
-    import uvicorn
-
     # Start MCP server in a separate thread
     mcp_thread = threading.Thread(target=run_mcp_server, daemon=True)
     mcp_thread.start()
 
-    # Start FastAPI application
+    # Note: When running in Docker, uvicorn is started via the CMD
+    # This section is kept for local development outside Docker
+    import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
