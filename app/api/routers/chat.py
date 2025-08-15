@@ -12,7 +12,7 @@ router = APIRouter()
 class ChatRequest(BaseModel):
     """Request model for chat endpoint."""
 
-    language: str = "en-US"
+    language: str = "en-IN"
     category: str = (
         "crop_info"  # Default to crop_info, other options: fertilizers, market_prices, gov_schemes, other
     )
