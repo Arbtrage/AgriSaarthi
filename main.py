@@ -21,7 +21,17 @@ app.include_router(chat_router)
 
 @app.get("/")
 async def root():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "service": "AgriSaarthi RAG Service",
+        "version": "0.2.0",
+        "endpoints": {
+            "chat": "/chat",
+            "chat_stream": "/chat/stream",
+            "agents_categories": "/agents/categories",
+            "health": "/health",
+        },
+    }
 
 
 @app.get("/health")
