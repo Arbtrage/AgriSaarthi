@@ -5,7 +5,7 @@ A comprehensive Retrieval-Augmented Generation (RAG) system built with modern te
 ## 🚀 Features
 
 - **Intelligent Document Processing**: Multi-format document ingestion with smart chunking
-- **Advanced Vector Search**: Direct Milvus integration with optimized similarity search
+- **Advanced Vector Search**: Direct Qdrant Cloud integration with optimized similarity search
 - **Real-time Chat Interface**: Streaming responses via Server-Sent Events (SSE)
 - **Multi-tenant Support**: Namespace-based document isolation
 - **Modern AI Integration**: Google Gemini for LLM and embeddings
@@ -16,7 +16,7 @@ A comprehensive Retrieval-Augmented Generation (RAG) system built with modern te
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   Backend API   │    │   Vector Store  │
-│   (React/Next)  │◄──►│   (FastAPI)     │◄──►│   (Milvus)     │
+│   (React/Next)  │◄──►│   (FastAPI)     │◄──►│   (Qdrant)     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                               │
                               ▼
@@ -31,7 +31,7 @@ A comprehensive Retrieval-Augmented Generation (RAG) system built with modern te
 - **Python**: 3.13+
 - **Node.js**: 18+ (for frontend)
 - **Package Manager**: `uv` for Python, `npm` or `yarn` for Node.js
-- **Vector Database**: Zilliz Cloud or Milvus instance
+- **Vector Database**: Qdrant Cloud instance
 - **AI Services**: Google AI Studio API key
 
 ## 🛠️ Backend Implementation
@@ -47,9 +47,9 @@ GEMINI_MODEL=gemini-2.0-flash
 EMBED_MODEL_NAME=text-embedding-004
 
 # Vector Database
-MILVUS_URI=grpc://your-zilliz-endpoint:19530
-MILVUS_TOKEN=your_zilliz_api_key_or_user:pass
-MILVUS_COLLECTION=rag_documents
+QDRANT_URL=https://your-cluster.qdrant.io
+QDRANT_API_KEY=your_qdrant_api_key
+QDRANT_COLLECTION=rag_documents
 
 # Server Configuration
 HOST=0.0.0.0
@@ -66,8 +66,8 @@ cd server
 # Install Python dependencies
 uv sync
 
-# Create Milvus collection
-uv run python scripts/create_milvus_collection.py
+# Create Qdrant collection
+uv run python scripts/create_qdrant_collection.py
 ```
 
 ### Running the Backend
@@ -125,7 +125,7 @@ curl -N -X POST http://localhost:8000/chat/stream \
 
 - **FastAPI**: Modern, fast web framework with automatic API documentation
 - **LlamaIndex**: Intelligent document processing and RAG orchestration
-- **PyMilvus**: Direct vector database integration for optimal performance
+- **Qdrant Client**: Direct vector database integration for optimal performance
 - **Google Gemini**: State-of-the-art LLM and embedding models
 - **Async Operations**: Non-blocking I/O for better scalability
 
@@ -270,7 +270,7 @@ npm run type-check
 
 ### Database Schema
 
-The Milvus collection uses a simplified schema for optimal performance:
+The Qdrant collection uses a simplified schema for optimal performance:
 
 ```python
 {
@@ -380,7 +380,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - [LlamaIndex](https://github.com/run-llama/llama_index) for RAG orchestration
-- [Milvus](https://milvus.io/) for vector database
+- [Qdrant](https://qdrant.tech/) for vector database
 - [Google Gemini](https://ai.google.dev/) for AI models
 - [FastAPI](https://fastapi.tiangolo.com/) for the web framework
 - [React](https://react.dev/) for the frontend framework

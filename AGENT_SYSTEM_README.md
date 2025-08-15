@@ -60,7 +60,7 @@ app/agents/
 
 #### Shared Tools
 
-- **knowledge_base_search**: Searches the Milvus vector database for agricultural information
+- **knowledge_base_search**: Searches the Qdrant vector database for agricultural information
 - **web_search**: Searches the web for current information, market prices, and news
 
 ## API Usage
@@ -236,7 +236,7 @@ Each agent has a `prompt.py` file containing:
 
 All agents automatically have access to:
 
-- Knowledge base search (Milvus vector database)
+- Knowledge base search (Qdrant vector database)
 - Web search (DuckDuckGo API)
 - Language-specific system instructions
 

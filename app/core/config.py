@@ -12,9 +12,11 @@ class Settings:
     gemini_model: str
     embed_model_name: str
 
-    milvus_uri: Optional[str]
-    milvus_token: Optional[str]
-    milvus_collection: str
+    qdrant_url: Optional[str]
+    qdrant_api_key: Optional[str]
+    qdrant_collection: str
+
+    tavily_api_key: Optional[str]
 
     @staticmethod
     def load() -> "Settings":
@@ -22,9 +24,10 @@ class Settings:
             google_api_key=os.getenv("GOOGLE_API_KEY"),
             gemini_model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
             embed_model_name=os.getenv("EMBED_MODEL_NAME", "text-embedding-004"),
-            milvus_uri=os.getenv("MILVUS_URI"),
-            milvus_token=os.getenv("MILVUS_TOKEN"),
-            milvus_collection=os.getenv("MILVUS_COLLECTION", "rag_documents"),
+            qdrant_url=os.getenv("QDRANT_URL"),
+            qdrant_api_key=os.getenv("QDRANT_API_KEY"),
+            qdrant_collection="argisathi",
+            tavily_api_key=os.getenv("TAVILY_API_KEY"),
         )
 
 

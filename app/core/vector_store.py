@@ -1,25 +1,25 @@
 from typing import Optional
 from app.core.config import get_settings
 from app.core.llm import get_llm, get_embed_model
-from llama_index.vector_stores.milvus import MilvusVectorStore
+from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.core import StorageContext, VectorStoreIndex
 
-_vector_store: Optional[MilvusVectorStore] = None
+_vector_store: Optional[QdrantVectorStore] = None
 _storage_context: Optional[StorageContext] = None
 
 
-def get_vector_store() -> MilvusVectorStore:
+def get_vector_store() -> QdrantVectorStore:
     global _vector_store
     if _vector_store is None:
         settings = get_settings()
-        if not settings.milvus_uri:
+        if not settings.qdrant_url:
             raise RuntimeError(
-                "MILVUS_URI is required in environment (Zilliz Cloud endpoint)"
+                "QDRANT_URL is required in environment (Qdrant Cloud endpoint)"
             )
-        _vector_store = MilvusVectorStore(
-            uri=settings.milvus_uri,
-            token=settings.milvus_token or None,
-            collection_name=settings.milvus_collection,
+        _vector_store = QdrantVectorStore(
+            url=settings.qdrant_url,
+            api_key=settings.qdrant_api_key,
+            collection_name=settings.qdrant_collection,
         )
     return _vector_store
 

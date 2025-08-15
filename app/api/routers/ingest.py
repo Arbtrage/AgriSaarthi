@@ -1,9 +1,11 @@
-from typing import List, Optional
+import asyncio
+import os
+from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from fastapi.responses import JSONResponse
-from app.utils.parsing import read_file_to_text
+from app.core.qdrant_client import insert_documents, get_collection_stats
 from app.utils.chunking import chunk_text
-from app.core.milvus_client import insert_documents, get_collection_stats
+from app.utils.parsing import read_file_to_text
 
 router = APIRouter()
 
@@ -37,7 +39,7 @@ async def ingest(
         if not all_texts:
             raise HTTPException(status_code=400, detail="No content to ingest")
 
-        # Insert directly into Milvus with simplified schema
+        # Insert directly into Qdrant with simplified schema
         await insert_documents(texts=all_texts, metadatas=all_metadatas)
 
         # Verify insertion by getting collection stats
