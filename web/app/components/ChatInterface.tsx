@@ -75,7 +75,7 @@ export default function ChatInterface({ selectedCategory, onBackToHome }: ChatIn
     const handleStreamingChat = async (message: ChatMessage) => {
         try {
             console.log("Starting streaming chat for message:", message.id);
-            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/chat/stream", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/stream`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
