@@ -21,7 +21,7 @@ export default function HomeScreen({ onStartChat, selectedCategory }: HomeScreen
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/agents/categories");
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/categories`);
             const data = await response.json();
 
             const mappedCategories = data.primary_categories.map((cat: string) => ({
