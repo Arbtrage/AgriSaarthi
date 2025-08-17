@@ -5,8 +5,8 @@ from app.agents.gov_schemes_agent.prompt import GOV_SCHEMES_PROMPT
 class GovSchemesAgent(BaseAgent):
     """Agent specialized in government agricultural schemes and subsidies."""
 
-    def __init__(self, language: str = "en-US"):
-        super().__init__(language=language)
+    def __init__(self, language: str = "en-US", markdown: bool = False):
+        super().__init__(language=language, markdown=markdown)
         self.specialization = "government_schemes"
         self.prompt_template = GOV_SCHEMES_PROMPT
 

@@ -5,7 +5,7 @@ from app.api.routers.chat import router as chat_router
 import threading
 from app.mcp.mcp import mcp
 
-app = FastAPI(title="Agrisathi RAG Service", version="0.2.0")
+app = FastAPI(title="AgriSaarthi RAG Service", version="0.2.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,6 +17,28 @@ app.add_middleware(
 
 app.include_router(ingest_router)
 app.include_router(chat_router)
+
+
+def run_mcp_server():
+    """Run the MCP server on port 8005"""
+    try:
+        print("🚀 Starting MCP server on port 8005...")
+        mcp.run(transport="streamable-http", port=8005)
+    except Exception as e:
+        print(f"❌ Failed to start MCP server: {e}")
+
+
+@app.on_event("startup")
+async def startup_event():
+    """Start MCP server when FastAPI starts"""
+    print("🚀 Starting AgriSaarthi services...")
+
+    # Start MCP server in a separate thread
+    mcp_thread = threading.Thread(target=run_mcp_server, daemon=True)
+    mcp_thread.start()
+
+    print("✅ MCP server started in background on port 8005")
+    print("✅ FastAPI app ready on port 8000")
 
 
 @app.get("/")
@@ -31,26 +53,37 @@ async def root():
             "agents_categories": "/agents/categories",
             "health": "/health",
         },
+        "mcp_server": {
+            "status": "running",
+            "port": 8005,
+            "tools": ["search_knowledgebase", "web_search"],
+        },
     }
 
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
-
-
-def run_mcp_server():
-    """Run the MCP server in a separate thread"""
-    mcp.run(transport="streamable-http")
+    return {
+        "status": "healthy",
+        "service": "AgriSaarthi RAG Service",
+        "mcp_server": "running on port 8005",
+    }
 
 
 if __name__ == "__main__":
+    import uvicorn
+
+    print("🌾 AgriSaarthi - AI-Powered Agricultural Assistant")
+    print("=" * 60)
+    print("Starting services...")
+
     # Start MCP server in a separate thread
     mcp_thread = threading.Thread(target=run_mcp_server, daemon=True)
     mcp_thread.start()
 
-    # Note: When running in Docker, uvicorn is started via the CMD
-    # This section is kept for local development outside Docker
-    import uvicorn
+    print("✅ MCP server started on port 8005")
+    print("✅ Starting FastAPI app on port 8000")
+    print("=" * 60)
 
+    # Start FastAPI app
     uvicorn.run(app, host="0.0.0.0", port=8000)

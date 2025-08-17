@@ -39,13 +39,16 @@ class AgentFactory:
     }
 
     @classmethod
-    def create_agent(cls, category: str, language: str = "en-US") -> BaseAgent:
+    def create_agent(
+        cls, category: str, language: str = "en-IN", markdown: bool = False
+    ) -> BaseAgent:
         """
-        Create an agent based on the category and language.
+        Create an agent based on the category, language, and markdown preference.
 
         Args:
             category: The category of agricultural information needed
             language: The language code for the agent (e.g., "hi-IN", "en-US")
+            markdown: Whether the response should be formatted in markdown
 
         Returns:
             A specialized agent instance
@@ -62,7 +65,7 @@ class AgentFactory:
                 f"Warning: Unknown category '{category}', defaulting to CropScienceAgent"
             )
 
-        return agent_class(language=language)
+        return agent_class(language=language, markdown=markdown)
 
     @classmethod
     def get_available_categories(cls) -> list:

@@ -5,8 +5,8 @@ from app.agents.other_agent.prompt import OTHER_PROMPT
 class OtherAgent(BaseAgent):
     """Agent specialized in miscellaneous agricultural topics and general farming advice."""
 
-    def __init__(self, language: str = "en-US"):
-        super().__init__(language=language)
+    def __init__(self, language: str = "en-US", markdown: bool = False):
+        super().__init__(language=language, markdown=markdown)
         self.specialization = "general_agriculture"
         self.prompt_template = OTHER_PROMPT
 

@@ -13,10 +13,9 @@ class ChatRequest(BaseModel):
     """Request model for chat endpoint."""
 
     language: str = "en-IN"
-    category: str = (
-        "crop_info"  # Default to crop_info, other options: fertilizers, market_prices, gov_schemes, other
-    )
+    category: str = "crop_info"
     question: str
+    markdown: bool = False
 
 
 @router.post("/chat/stream")
@@ -25,15 +24,17 @@ async def chat_stream(request: ChatRequest):
     Stream chat response from the appropriate agricultural agent.
 
     Args:
-        request: ChatRequest containing language, category, and question
+        request: ChatRequest containing language, category, question, and markdown preference
 
     Returns:
-        StreamingResponse with the agent's response
+        StreamingResponse with the agent's response as plain text or markdown
     """
     try:
-        # Create the appropriate agent based on category and language
+        # Create the appropriate agent based on category, language, and markdown preference
         agent = AgentFactory.create_agent(
-            category=request.category, language=request.language
+            category=request.category,
+            language=request.language,
+            markdown=request.markdown,
         )
 
         # Get the FunctionAgent from the specialized agent
@@ -45,19 +46,19 @@ async def chat_stream(request: ChatRequest):
                 # FunctionAgent.run() returns a workflow handler that has stream_events()
                 handler = function_agent.run(request.question)
 
-                accumulated_text = ""
                 async for event in handler.stream_events():
                     if hasattr(event, "delta") and event.delta:
-                        accumulated_text += event.delta
-                        yield f"{event.delta}"
-                if not accumulated_text:
-                    yield f"[COMPLETE] No streaming content received"
+                        # Send the token as plain text, encoded as UTF-8 bytes
+                        yield event.delta.encode("utf-8")
 
             except Exception as e:
-                err = json.dumps({"error": str(e)})
-                yield f"data: {err}\n\n".encode("utf-8")
+                error_msg = f"Error: {str(e)}"
+                yield error_msg.encode("utf-8")
 
-        return StreamingResponse(token_generator(), media_type="text/event-stream")
+        # Use text/plain instead of text/event-stream for plain text streaming
+        return StreamingResponse(
+            token_generator(), media_type="text/plain; charset=utf-8"
+        )
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create agent: {str(e)}")
@@ -69,15 +70,17 @@ async def chat(request: ChatRequest):
     Get complete chat response from the appropriate agricultural agent.
 
     Args:
-        request: ChatRequest containing language, category, and question
+        request: ChatRequest containing language, category, question, and markdown preference
 
     Returns:
         Complete response as JSON
     """
     try:
-        # Create the appropriate agent based on category and language
+        # Create the appropriate agent based on category, language, and markdown preference
         agent = AgentFactory.create_agent(
-            category=request.category, language=request.language
+            category=request.category,
+            language=request.language,
+            markdown=request.markdown,
         )
 
         # Get the FunctionAgent from the specialized agent
@@ -146,11 +149,13 @@ async def health_check():
 
 # Keep the old endpoint for backward compatibility
 @router.post("/chat/stream/legacy")
-async def chat_stream_legacy(message: str, namespace: Optional[str] = None):
+async def chat_stream_legacy(
+    message: str, namespace: Optional[str] = None, markdown: bool = False
+):
     """Legacy endpoint for backward compatibility."""
     from app.agents.agent import build_agent
 
-    agent = build_agent(namespace=namespace)
+    agent = build_agent(namespace=namespace, markdown=markdown)
 
     async def token_generator() -> AsyncGenerator[bytes, None]:
         try:
@@ -158,16 +163,14 @@ async def chat_stream_legacy(message: str, namespace: Optional[str] = None):
             # FunctionAgent.run() returns a workflow handler that has stream_events()
             handler = agent.run(message)
 
-            accumulated_text = ""
             async for event in handler.stream_events():
                 if hasattr(event, "delta") and event.delta:
-                    accumulated_text += event.delta
-                    yield f"{event.delta}"
-            if not accumulated_text:
-                yield f"[COMPLETE] No streaming content received"
+                    # Send the token as plain text, encoded as UTF-8 bytes
+                    yield event.delta.encode("utf-8")
 
         except Exception as e:
-            err = json.dumps({"error": str(e)})
-            yield f"data: {err}\n\n".encode("utf-8")
+            error_msg = f"Error: {str(e)}"
+            yield error_msg.encode("utf-8")
 
-    return StreamingResponse(token_generator(), media_type="text/event-stream")
+    # Use text/plain instead of text/event-stream for plain text streaming
+    return StreamingResponse(token_generator(), media_type="text/plain; charset=utf-8")

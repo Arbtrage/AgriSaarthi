@@ -5,8 +5,8 @@ from app.agents.fertilizer_agent.prompt import FERTILIZER_PROMPT
 class FertilizerAgent(BaseAgent):
     """Agent specialized in fertilizer recommendations and management."""
 
-    def __init__(self, language: str = "en-US"):
-        super().__init__(language=language)
+    def __init__(self, language: str = "en-US", markdown: bool = False):
+        super().__init__(language=language, markdown=markdown)
         self.specialization = "fertilizer_management"
         self.prompt_template = FERTILIZER_PROMPT
 
