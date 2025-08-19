@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface Category {
     name: string;
@@ -64,7 +65,7 @@ export default function HomeScreen({ onStartChat, selectedCategory }: HomeScreen
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 rounded-full flex items-center justify-center">
-                            <span className="text-white text-lg font-bold">🌾</span>
+                            <Image src="/logo.jpeg" alt="AgriSaarthi" width={40} height={40} />
                         </div>
                         <div>
                             <p className="text-sm text-gray-600">Welcome back!</p>
@@ -79,7 +80,8 @@ export default function HomeScreen({ onStartChat, selectedCategory }: HomeScreen
                 {/* Hero Section */}
                 <div className="text-center mb-16">
                     <div className="w-32 h-32 rounded-full mx-auto mb-6 flex items-center justify-center">
-                        <span className="text-white text-4xl">🌾</span>
+                    <Image src="/logo.jpeg" alt="AgriSaarthi" width={100} height={100} />
+
                     </div>
                     <h2 className="text-4xl font-bold text-gray-900 mb-4">
                         Hello, I'm AgriSaarthi
